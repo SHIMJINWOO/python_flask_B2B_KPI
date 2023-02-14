@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css"> 
+</head>
+  <body>
+    <header>
+      <h1>SPIDOR B2B</h1>
+      <p>Upload CSV file</p>
+    </header>
+    <main>
+      <form method="POST" enctype="multipart/form-data" action="/">
+        <input type="file" id="myFile" name="uploaded-file" accept=".csv">
+        <input type="submit" value="Upload file">
+      </form>
+      <br>
+      <p style="color:green;">file uploaded successfully</p>
+      <div>
+        <form action="/show_data" target="_blank">
+          <input type="submit" value="대시보드 보기" />
+        </form>
+        
+        <a href="/"> DeleteFile &rarr;
+        
+      </div>
+    </main>
+  </body>
+</html>
