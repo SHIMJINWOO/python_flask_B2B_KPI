@@ -1,20 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css"> 
-  </head>
-  <body>
-    <header>
-      <h1>SPIDOR DASHBOARD</h1>
-      <p>1</p>
-    </header>
-    <main>
-      <div style="height:700px; width: 90%; overflow-y:auto;  font-size: 8px; overflow-x: scroll;">
-          
-    {{ data_var|safe }}
-          2
+  <link rel="stylesheet" href="https://unpkg.com/mvp.css@1.12/mvp.css">
+  <style>
+    .table_bk, .table_br, .table_dk,.table_pc,.table_pb,.table_em,.table_hb{
+      display: none;
+    }
+  </style>
 
+</head>
+<body>
+  <header style="padding-bottom:10px; display: flex; flex-direction: column; align-items: center;">
+    <h2>SPIDOR B2B QUALTY DASHBOARD</h2>
+      <form style="padding: 10px 10px 6px 24px; display: flex; justify-content: space-between; align-items: center; width: 90%;">
+        <label>Brand
+        <select onchange="removeStyle()">
+          <option>전체</option>
+          <option>버거킹</option>
+          <option>배스킨라빈스</option>
+          <option>던킨도너츠</option>
+          <option>파스쿠찌</option>
+          <option>파리바게뜨</option>
+          <option>이마트24</option>
+          <option>해피버틀러</option>
+        </select>
+        </label>
+        <div>
+        <button onclick="downloadTable()">Download CSV &rarr;</button>
+        <br>
+        <a style="font-size: 5px;" href="data:text/csv;charset=utf-8,%EF%BB%BF{{ table_total_raw.to_csv(index=False) | urlencode }}" download="table_total_raw.csv">Download Raw Data CSV &rarr;</a>
+        </div>
+      </form>
+  </header>
+
+  <main style="padding-top:10px;">
+    <div style="height:700px; width: 100%; overflow-y:auto;  font-size: 7px;">
+      <div class="table_total">
+        {{ table_total|safe }}
       </div>
-    </main>
-    </body>
+      <div class="table_bk">
+        {{ table_bk|safe }}
+      </div>
+      <div class="table_br">
+        {{ table_br|safe }}
+      </div> 
+      <div class="table_dk">
+        {{ table_dk|safe }}
+      </div> 
+      <div class="table_pc">
+        {{ table_pc|safe }}
+      </div> 
+      <div class="table_pb">
+        {{ table_pb|safe }}
+      </div> 
+      <div class="table_em">
+        {{ table_em|safe }}
+      </div> 
+      <div class="table_hb">
+        {{ table_hb|safe }}
+      </div> 
+      <div class="table_fairing">
+        {{ daily_order_count|safe }}
+      </div>
+    </div>
+  </main>
+<script>
+  function removeStyle() {
+    var selectedBrand = document.querySelector("select").value;
+    var tableTOTAL = document.querySelector(".table_total");
+    var tableBK = document.querySelector(".table_bk");
+    var tableBR = document.querySelector(".table_br");
+    var tableDK = document.querySelector(".table_dk");
+    var tablePC = document.querySelector(".table_pc");
+    var tablePB = document.querySelector(".table_pb");
+    var tableEM = document.querySelector(".table_em");
+    var tableHB = document.querySelector(".table_hb");
+
+    switch(selectedBrand) {
+      case "전체":
+        tableTOTAL.style.display = "block";
+        tableBK.style.display = "none";
+        tableBR.style.display = "none";
+        tableDK.style.display = "none";
+        tablePC.style.display = "none";
+        tablePB.style.display = "none";
+        tableEM.style.display = "none";
+        tableHB.style.display = "none";
+        break;
+      case "버거킹":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "block";
+        tableBR.style.display = "none";
+        tableDK.style.display = "none";
+        tablePC.style.display = "none";
+        tablePB.style.display = "none";
+        tableEM.style.display = "none";
+        tableHB.style.display = "none";
+        break;
+      case "배스킨라빈스":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "none";
+        tableBR.style.display = "block";
+        tableDK.style.display = "none";
+        tablePC.style.display = "none";
+        tablePB.style.display = "none";
+        tableEM.style.display = "none";
+        tableHB.style.display = "none";
+        break;
+      case "던킨도너츠":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "none";
+        tableBR.style.display = "none";
+        tableDK.style.display = "block";
+        tablePC.style.display = "none";
+        tablePB.style.display = "none";
+        tableEM.style.display = "none";
+        tableHB.style.display = "none";
+        break;
+      case "파스쿠찌":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "none";
+        tableBR.style.display = "none";
+        tableDK.style.display = "none";
+        tablePC.style.display = "block";
+        tablePB.style.display = "none";
+        tableEM.style.display = "none";
+        tableHB.style.display = "none";
+        break;
+      case "파리바게뜨":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "none";
+        tableBR.style.display = "none";
+        tableDK.style.display = "none";
+        tablePC.style.display = "none";
+        tablePB.style.display = "block";
+        tableEM.style.display = "none";
+        tableHB.style.display = "none";
+        break;
+      case "이마트24":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "none";
+        tableBR.style.display = "none";
+        tableDK.style.display = "none";
+        tablePC.style.display = "none";
+        tablePB.style.display = "none";
+        tableEM.style.display = "block";
+        tableHB.style.display = "none";
+        break;
+      case "해피버틀러":
+        tableTOTAL.style.display = "none";
+        tableBK.style.display = "none";
+        tableBR.style.display = "none";
+        tableDK.style.display = "none";
+        tablePC.style.display = "none";
+        tablePB.style.display = "none";
+        tableEM.style.display = "none";
+        tableHB.style.display = "block";
+        break;
+    }
+  }
+function downloadTable() {
+  let csv = "\ufeff"; // add BOM to indicate UTF-16LE encoding
+  const tables = document.querySelectorAll("table");
+  tables.forEach(table => {
+    const rows = table.querySelectorAll("tr");
+    rows.forEach(row => {
+      if (row.offsetParent !== null) { // Only include rows that are visible
+        const cells = row.querySelectorAll("th,td");
+        let rowArray = [];
+        cells.forEach(cell => {
+          rowArray.push(cell.innerText);
+        });
+        csv += rowArray.join(",");
+        csv += "\n";
+      }
+    });
+  });
+  const link = document.createElement("a");
+  link.setAttribute("href", "data:text/csv;charset=utf-16le," + encodeURIComponent(csv));
+  link.setAttribute("download", "table.csv");
+  document.body.appendChild(link);
+  link.click();
+}
+
+</script>
+</body>
 </html>

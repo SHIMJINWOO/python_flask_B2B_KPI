@@ -11,16 +11,17 @@
     <main>
       <form method="POST" enctype="multipart/form-data" action="/">
         <input type="file" id="myFile" name="uploaded-file" accept=".csv">
-        <input type="submit" value="Upload file">
       </form>
       <br>
       <p style="color:green;">file uploaded successfully</p>
       <div>
         <form action="/show_data" target="_blank">
-          <input type="submit" value="대시보드 보기" />
+          <input type="submit" value="브랜드별 지표 보기" />
         </form>
-        
-        <a href="/"> DeleteFile &rarr;
+        <form action="/fairing_data" target="_blank">
+          <input type="submit" value="페어링 지표 보기" />
+        </form>
+        <a href="/"> DeleteFile &rarr; </a>
         
       </div>
     </main>
