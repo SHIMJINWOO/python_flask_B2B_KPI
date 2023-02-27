@@ -205,52 +205,6 @@ def showData():
      daily_order_count=daily_order_count
      )
 
-@app.route('/fairing_data')
-def fairing_data():
-    # Get the fairing data and pass it to the template
-    global uploaded_df
-    date_columns = ['접수시각', '배차시각', '완료시각', '픽업시각']
-
-    # 24시 초과하는 경우 +1일
-    def plus1day(date_column):
-        uploaded_df[date_column] = pd.to_datetime(uploaded_df[date_column])
-        midnight_mask = uploaded_df['접수시각'].dt.hour == 0
-        apply_mask = (~midnight_mask) | (uploaded_df[date_column].dt.hour != 0)
-        uploaded_df[date_column] = np.where(apply_mask, uploaded_df[date_column] + pd.Timedelta(days=1), uploaded_df[date_column])
-        uploaded_df[date_column] = uploaded_df[date_column] + pd.Timedelta(days=1) * (
-            (uploaded_df[date_column].dt.hour == 0) & (date_column != '접수시각')
-            | ((uploaded_df['접수시각'].dt.hour == 23) & (uploaded_df[date_column].dt.hour < 12) & (date_column == '픽업시각'))
-        )
-
-    for date_column in date_columns:
-        plus1day(date_column)
-
-    # 1. Store Arr 추출: stores
-    store_arr = uploaded_df["매장명"].drop_duplicates()
-    stores = store_arr.values
-
-    # 2. 쓸데없는 열 삭제
-    uploaded_df.drop(uploaded_df.columns[range(14, 38)], axis=1, inplace=True)
-    uploaded_df.drop(uploaded_df.columns[range(16, 20)], axis=1, inplace=True)
-
-    # convert the '접수시각' column to a datetime format
-    uploaded_df['접수시각'] = pd.to_datetime(uploaded_df['접수시각'])
-
-    # group by '브랜드' and calculate daily order counts for each brand
-    daily_order_count = uploaded_df.groupby(['브랜드', '배달접수일자', uploaded_df['접수시각'].dt.floor('Min').dt.time])\
-        .size().reset_index(name='num_times')
-    daily_order_count = daily_order_count.groupby(['브랜드', '배달접수일자', 'num_times'])\
-        ['num_times'].count().reset_index(name='count_of_counts')
-    daily_order_count = daily_order_count.pivot_table(index=['브랜드', '배달접수일자'], columns='num_times',
-                                                    values='count_of_counts', fill_value=0)
-    daily_order_count.reset_index(inplace=True)
-
-    return render_template('fairing_data.html', daily_order_count=daily_order_count)
-
-
-
-
-
 
 
 
