@@ -211,6 +211,7 @@ def fairing_data():
     global uploaded_df
     date_columns = ['접수시각', '배차시각', '완료시각', '픽업시각']
 
+    # 24시 초과하는 경우 +1일
     def plus1day(date_column):
         uploaded_df[date_column] = pd.to_datetime(uploaded_df[date_column])
         midnight_mask = uploaded_df['접수시각'].dt.hour == 0
@@ -245,6 +246,7 @@ def fairing_data():
     daily_order_count.reset_index(inplace=True)
 
     return render_template('fairing_data.html', daily_order_count=daily_order_count)
+
 
 
 
