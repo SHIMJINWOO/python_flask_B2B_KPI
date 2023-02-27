@@ -179,10 +179,11 @@ def showData():
     table_hb = df_해피버틀러.to_html(index=False)
     table_total_raw = uploaded_df
 
+    uploaded_df_copy = uploaded_df.copy()
     # convert the '접수시각' column to a datetime format
-    uploaded_df['접수시각'] = pd.to_datetime(uploaded_df['접수시각'])
+    uploaded_df_copy['접수시각'] = pd.to_datetime(uploaded_df_copy['접수시각'])
     # group by '브랜드' and calculate daily order counts for each brand
-    daily_order_count = uploaded_df.groupby(['브랜드', '배달접수일자', uploaded_df['접수시각'].dt.floor('Min').dt.time])\
+    daily_order_count = uploaded_df_copy.groupby(['브랜드', '배달접수일자', uploaded_df_copy['접수시각'].dt.floor('Min').dt.time])\
         .size().reset_index(name='num_times')
     daily_order_count = daily_order_count.groupby(['브랜드', '배달접수일자', 'num_times'])\
         ['num_times'].count().reset_index(name='count_of_counts')
